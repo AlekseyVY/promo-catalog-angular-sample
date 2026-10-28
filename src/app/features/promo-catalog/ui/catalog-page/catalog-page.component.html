@@ -1,0 +1,32 @@
+<header class="toolbar">
+    <div class="chips" role="radiogroup" aria-label="Фильтр товаров" tabindex="0" (focus)="onFiltersFocus()">
+        @for (item of typeFilters; track item.code; let idx = $index) {
+            <button
+                type="button"
+                role="radio"
+                class="chip"
+                tabindex="-1"
+                [class.chip--checked]="item.checked"
+                [class.chip--focused]="idx === focusedChipIdx"
+                [attr.aria-checked]="item.checked"
+                (click)="changeTypeFilter(item)"
+            >
+                {{ item.title }}
+                @if (item.count !== null) {
+                    <span class="chip__count">{{ item.count }}</span>
+                }
+            </button>
+        }
+    </div>
+
+    <input
+        class="search"
+        type="search"
+        placeholder="Поиск: артикул, штрихкод, название, бренд"
+        [formControl]="searchControl"
+        (focus)="onSearchFocus()"
+        (keydown)="onSearchKeydown($event)"
+    />
+</header>
+
+<app-product-table class="table" [searchString$]="searchString$" (openProduct)="openProduct($event)" (sortChange)="onSortChange($event)" />

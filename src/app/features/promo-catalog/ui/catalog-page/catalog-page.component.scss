@@ -1,0 +1,57 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    padding: 16px;
+}
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    outline: none;
+}
+
+.chip {
+    padding: 4px 12px;
+    border: 1px solid var(--border-color, #d9d9d9);
+    border-radius: 16px;
+    background: #fff;
+    cursor: pointer;
+
+    &--checked {
+        border-color: var(--primary-color, #1677ff);
+        background: var(--primary-color, #1677ff);
+        color: #fff;
+    }
+
+    &--focused {
+        outline: 2px solid var(--focus-color, #91caff);
+        outline-offset: 1px;
+    }
+
+    &__count {
+        margin-left: 6px;
+        opacity: 0.75;
+    }
+}
+
+.search {
+    flex: 1 1 280px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color, #d9d9d9);
+    border-radius: 6px;
+}
+
+.table {
+    flex: 1 1 auto;
+    min-height: 0;
+}

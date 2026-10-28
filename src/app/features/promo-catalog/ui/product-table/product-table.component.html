@@ -1,0 +1,45 @@
+@if (sort$ | async; as sort) {
+    <div class="table-header" role="row">
+        <button type="button" class="th th--sku" (click)="onHeaderClick('sku', sort)">Артикул</button>
+        <button type="button" class="th th--name" (click)="onHeaderClick('name', sort)">Наименование</button>
+        <button type="button" class="th th--category" (click)="onHeaderClick('categoryName', sort)">Категория</button>
+        <button type="button" class="th th--price" (click)="onHeaderClick('regularPrice', sort)">Цена</button>
+        <button type="button" class="th th--price" (click)="onHeaderClick('promoPrice', sort)">Промо-цена</button>
+        <span class="th th--discount">Скидка</span>
+        <button type="button" class="th th--stock" (click)="onHeaderClick('stock', sort)">Остаток</button>
+        <span class="th th--status">Акция</span>
+        <button type="button" class="th th--date" (click)="onHeaderClick('promoEndsAt', sort)">До</button>
+    </div>
+}
+
+<cdk-virtual-scroll-viewport class="table-body" [itemSize]="rowHeight" [minBufferPx]="rowHeight * 10" [maxBufferPx]="rowHeight * 20">
+    <div
+        *cdkVirtualFor="let row of rows; let idx = index; trackBy: trackByProductRow"
+        class="tr"
+        role="row"
+        [class.tr--selected]="idx === selectedRowIdx"
+        [class.tr--inactive]="row.isInactive"
+        (click)="selectFromClick(idx)"
+        (dblclick)="openProduct.emit(row.product)"
+    >
+        <span class="td td--sku">{{ row.product.sku }}</span>
+        <span class="td td--name" [attr.title]="row.showNameTooltip ? row.product.name : null">{{ row.product.name }}</span>
+        <span class="td td--category">{{ row.product.categoryName }}</span>
+        <span class="td td--price">{{ row.product.regularPrice | currency: 'RUB' : 'symbol-narrow' : '1.2-2' }}</span>
+        <span class="td td--price">
+            {{ row.product.promoPrice !== null ? (row.product.promoPrice | currency: 'RUB' : 'symbol-narrow' : '1.2-2') : '—' }}
+        </span>
+        <span class="td td--discount">{{ row.discountPercent !== null ? '−' + row.discountPercent + '%' : '' }}</span>
+        <span class="td td--stock" [class.td--warning]="row.isLowStock">{{ row.product.stock }}</span>
+        <span class="td td--status"><span class="status" [ngClass]="row.statusClass">{{ row.statusTitle }}</span></span>
+        <span class="td td--date">{{ row.product.promoEndsAt | date: 'dd.MM.yyyy' }}</span>
+    </div>
+
+    @if (!rows.length && !(loading$ | async)) {
+        <div class="empty">Ничего не найдено. Измените фильтр или строку поиска.</div>
+    }
+</cdk-virtual-scroll-viewport>
+
+@if (loading$ | async) {
+    <div class="loader" aria-live="polite">Загрузка…</div>
+}
